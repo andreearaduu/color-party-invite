@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Petrecere în Culori • 7 Noiembrie</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    }
+
+    body {
+      background-color: #0b0f19;
+      color: #f1f5f9;
+      display: flex;
+      justify-content: center;
+      padding: 16px;
+      min-height: 100vh;
+    }
+
+    .card {
+      width: 100%;
+      max-width: 420px;
+      background: #161f30;
+      border-radius: 24px;
+      padding: 24px 20px;
+      box-shadow: 0 12px 30px rgba(0,0,0,0.5);
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .badge {
+      display: inline-block;
+      align-self: center;
+      background: #f59e0b;
+      color: #111827;
+      font-weight: 800;
+      font-size: 11px;
+      letter-spacing: 0.5px;
+      padding: 5px 12px;
+      border-radius: 20px;
+      text-transform: uppercase;
+    }
+
+    .header {
+      text-align: center;
+    }
+
+    h1 {
+      font-size: 24px;
+      margin-top: 6px;
+      margin-bottom: 4px;
+      color: #ffffff;
+    }
+
+    .details {
+      color: #94a3b8;
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .invite-text {
+      background: #1e293b;
+      padding: 14px;
+      border-radius: 16px;
+      font-size: 13.5px;
+      line-height: 1.5;
+      color: #cbd5e1;
+      border-left: 4px solid #f59e0b;
+    }
+
+    .palette {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+
+    .color-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 12px 8px;
+      border-radius: 14px;
+      cursor: pointer;
+      border: 2px solid transparent;
+      transition: all 0.2s ease;
+      text-align: center;
+      min-height: 76px;
+    }
+
+    .color-card.selected {
+      border-color: #ffffff;
+      transform: scale(0.97);
+      box-shadow: 0 0 14px rgba(255, 255, 255, 0.4);
+    }
+
+    .color-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: #ffffff;
+      text-shadow: 0 1px 3px rgba(0,0,0,0.8);
+    }
+
+    .color-status {
+      font-size: 11px;
+      margin-top: 6px;
+      font-weight: 600;
+      background: rgba(0,0,0,0.45);
+      padding: 3px 8px;
+      border-radius: 8px;
+      color: #f8fafc;
+      width: 90%;
+      word-wrap: break-word;
+    }
+
+    .input-box {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    label {
+      font-size: 13px;
+      font-weight: 600;
+      color: #cbd5e1;
+    }
+
+    input[type="text"] {
+      width: 100%;
+      background: #0f172a;
+      border: 1px solid #334155;
+      padding: 12px;
+      border-radius: 12px;
+      color: #ffffff;
+      font-size: 15px;
+      outline: none;
+    }
+
+    input[type="text"]:focus {
+      border-color: #38bdf8;
+    }
+
+    .submit-btn {
+      width: 100%;
+      padding: 14px;
+      border-radius: 14px;
+      border: none;
+      background: linear-gradient(135deg, #f59e0b, #ef4444);
+      color: #ffffff;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .submit-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .status-msg {
+      text-align: center;
+      font-size: 13px;
+      font-weight: 600;
+      display: none;
+    }
+
+    .status-success {
+      color: #4ade80;
+    }
+
+    .status-error {
+      color: #f87171;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+    <span class="badge">Invitație Specială</span>
+
+    <div class="header">
+      <h1>Sf. Mihail și Gavril</h1>
+      <p class="details">📅 7 Noiembrie • 🕒 Ora 15:00</p>
+    </div>
+
+    <div class="invite-text">
+      De Sf. Mihail și Gavril facem spectacol de culori! 🎨<br><br>
+      Pe 7 Noiembrie, de la ora 15:00, adunăm gașca pentru o petrecere plină de viață.<br><br>
+      <strong>Regula jocului:</strong> alege-ți o culoare de mai jos, îmbracă-te în ea și adu un coș sau un platou cu bunătăți (dulciuri, snacksuri, sucuri) în aceeași nuanță!
+    </div>
+
+    <div class="input-box">
+      <label for="guestName">Numele tău:</label>
+      <input type="text" id="guestName" placeholder="Ex: Alex" required>
+    </div>
+
+    <div>
+      <label style="display:block; margin-bottom: 8px;">Alege culoarea ta:</label>
+      <div class="palette" id="paletteContainer">
+        <!-- Culorile se generează automat dinamic -->
+      </div>
+    </div>
+
+    <button type="button" class="submit-btn" id="submitBtn" onclick="submitRSVP()">Confirmă Prezența</button>
+
+    <div id="statusMessage" class="status-msg"></div>
+  </div>
+
+  <script>
+    // DATELE TALE:
+    const FORM_ACTION_URL = "https://docs.google.com/forms/d/e/1FAIpQLScPEye3QYyeq0HNxRKq5XuTpQxsfoT0wosgJMUrpGboSEmvAw/formResponse";
+    const ENTRY_NUME = "entry.1618262429";
+    const ENTRY_CULOARE = "entry.2021444436";
+    const SHEET_ID = "1v9X3j9Ijy2jAX8hJfT7Y_x8jO_MWDXIVR9rn-NTwdD4"; 
+
+    const COLORS = [
+      { name: "Roșu", bg: "#ef4444" },
+      { name: "Galben", bg: "#eab308" },
+      { name: "Verde", bg: "#22c55e" },
+      { name: "Albastru", bg: "#3b82f6" },
+      { name: "Mov", bg: "#a855f7" },
+      { name: "Roz", bg: "#ec4899" },
+      { name: "Portocaliu", bg: "#f97316" },
+      { name: "Alb", bg: "#64748b" }
+    ];
+
+    let selectedColor = "";
+    // Păstrează lista de invitați pentru fiecare culoare (ex: { "Roșu": ["Alex", "Ana"] })
+    let colorGuests = {};
+
+    async function loadTakenColors() {
+      // Inițializăm listele goale pentru toate culorile
+      COLORS.forEach(c => colorGuests[c.name] = []);
+
+      if (!SHEET_ID || SHEET_ID.includes("AICI")) {
+        renderPalette();
+        return;
+      }
+
+      const url = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/gviz/tq?tqx=out:json`;
+
+      try {
+        const res = await fetch(url);
+        const text = await res.text();
+        const json = JSON.parse(text.substring(text.indexOf('{'), text.lastIndexOf('}') + 1));
+        const rows = json.table.rows;
+
+        rows.forEach(r => {
+          const guest = (r.c[1]?.v || "").toString().trim();
+          const col = (r.c[2]?.v || "").toString().trim();
+
+          if (col && guest && colorGuests[col]) {
+            colorGuests[col].push(guest);
+          }
+        });
+      } catch (e) {
+        console.warn("Nu s-au putut prelua răspunsurile:", e);
+      }
+
+      renderPalette();
+    }
+
+    function renderPalette() {
+      const container = document.getElementById('paletteContainer');
+      container.innerHTML = "";
+
+      COLORS.forEach(c => {
+        const guests = colorGuests[c.name] || [];
+        const isSelected = selectedColor === c.name;
+
+        const card = document.createElement('div');
+        card.className = `color-card ${isSelected ? 'selected' : ''}`;
+        card.style.background = c.bg;
+
+        let statusText = "Disponibil ✓";
+        if (guests.length > 0) {
+          statusText = `Ales de: ${guests.join(', ')}`;
+        }
+
+        card.innerHTML = `
+          <span class="color-title">${c.name}</span>
+          <span class="color-status">${statusText}</span>
+        `;
+
+        // Toate cardurile rămân interactive și selectabile
+        card.onclick = () => {
+          document.querySelectorAll('.color-card').forEach(el => el.classList.remove('selected'));
+          card.classList.add('selected');
+          selectedColor = c.name;
+        };
+
+        container.appendChild(card);
+      });
+    }
+
+    async function submitRSVP() {
+      const name = document.getElementById('guestName').value.trim();
+      const status = document.getElementById('statusMessage');
+      const btn = document.getElementById('submitBtn');
+
+      if (!name) {
+        alert("Te rugăm să introduci numele!");
+        return;
+      }
+      if (!selectedColor) {
+        alert("Te rugăm să alegi o culoare!");
+        return;
+      }
+
+      btn.disabled = true;
+      btn.innerText = "Se trimite...";
+
+      const formData = new FormData();
+      formData.append(ENTRY_NUME, name);
+      formData.append(ENTRY_CULOARE, selectedColor);
+
+      try {
+        await fetch(FORM_ACTION_URL, {
+          method: "POST",
+          mode: "no-cors",
+          body: formData
+        });
+
+        status.className = "status-msg status-success";
+        status.innerHTML = `Bravo, <strong>${name}</strong>! Ai ales culoarea <strong>${selectedColor}</strong>! 🎉`;
+        status.style.display = "block";
+        btn.innerText = "Înscris cu succes!";
+
+        // Adăugăm numele în lista locală și redesenăm instant
+        if (!colorGuests[selectedColor]) colorGuests[selectedColor] = [];
+        colorGuests[selectedColor].push(name);
+        
+        renderPalette();
+      } catch (err) {
+        status.className = "status-msg status-error";
+        status.innerText = "A apărut o problemă. Încearcă din nou.";
+        status.style.display = "block";
+        btn.disabled = false;
+        btn.innerText = "Confirmă Prezența";
+      }
+    }
+
+    loadTakenColors();
+</script>
+
+</body>
+</html>
