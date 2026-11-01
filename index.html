@@ -176,6 +176,12 @@
     .status-error {
       color: #f87171;
     }
+
+    .color-card.taken {
+      opacity: 0.45;
+      cursor: not-allowed;
+      filter: grayscale(40%);
+    }
   </style>
 </head>
 <body>
@@ -227,7 +233,8 @@
       { name: "Roz", bg: "#e01dbd" },
       { name: "Portocaliu", bg: "#f97316" },
       { name: "Alb", bg: "#ffffff" },
-      { name: "Negru", bg: "#000000"}
+      { name: "Negru", bg: "#000000"},
+      { name: "Maro", bg: "#A52A2A"}
     ];
 
     let selectedColor = "";
@@ -272,28 +279,38 @@
 
       COLORS.forEach(c => {
         const guests = colorGuests[c.name] || [];
+        const isTaken = guests.length > 0;
         const isSelected = selectedColor === c.name;
 
         const card = document.createElement('div');
-        card.className = `color-card ${isSelected ? 'selected' : ''}`;
+        card.className = `color-card ${isSelected ? 'selected' : ''} ${isTaken ? 'taken' : ''}`;
         card.style.background = c.bg;
+        card.style.color = c.text;
+        
+        // Contur fin pentru cardurile albe sau negre
+        card.style.border = c.name === "Alb" ? "1px solid #cbd5e1" : (c.name === "Negru" ? "1px solid #334155" : "none");
 
         let statusText = "Disponibil ✓";
-        if (guests.length > 0) {
-          statusText = `Ales de: ${guests.join(', ')}`;
+        if (isTaken) {
+          statusText = `Ocupat de: ${guests.join(', ')}`;
         }
 
+        const statusBg = c.name === "Alb" ? "rgba(0,0,0,0.15)" : "rgba(0,0,0,0.45)";
+        const statusColor = c.text;
+
         card.innerHTML = `
-          <span class="color-title">${c.name}</span>
-          <span class="color-status">${statusText}</span>
+          <span class="color-title" style="color: ${c.text};">${c.name}</span>
+          <span class="color-status" style="background: ${statusBg}; color: ${statusColor};">${statusText}</span>
         `;
 
-        // Toate cardurile rămân interactive și selectabile
-        card.onclick = () => {
-          document.querySelectorAll('.color-card').forEach(el => el.classList.remove('selected'));
-          card.classList.add('selected');
-          selectedColor = c.name;
-        };
+        // Permite selectarea DOAR dacă nu a fost deja aleasă
+        if (!isTaken) {
+          card.onclick = () => {
+            document.querySelectorAll('.color-card').forEach(el => el.classList.remove('selected'));
+            card.classList.add('selected');
+            selectedColor = c.name;
+          };
+        }
 
         container.appendChild(card);
       });
